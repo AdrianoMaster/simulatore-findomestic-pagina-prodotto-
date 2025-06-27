@@ -44,6 +44,11 @@
     return urlParams.get(nome);
   }
 
+  function parsePrezzo(val) {
+    if (!val) return NaN;
+    return parseFloat(val.replace(',', '.'));
+  }
+
   function calcolaRata(importo) {
     const durata = 40;
     const interesseMensile = 0.006;
@@ -52,7 +57,7 @@
   }
 
   window.addEventListener("DOMContentLoaded", function () {
-    const prezzo = parseFloat(getParametroURL("prezzo"));
+    const prezzo = parsePrezzo(getParametroURL("prezzo"));
     const prezzoRilevato = document.getElementById("prezzoRilevato");
     const rata = document.getElementById("rata");
 
