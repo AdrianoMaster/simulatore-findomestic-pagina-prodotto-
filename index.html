@@ -3,7 +3,7 @@
 <html lang="it">
 <head>
   <meta charset="UTF-8">
-  <title>Simulatore Rata Prodotto</title>
+  <title>Simulatore Findomestic con parametro prezzo</title>
   <link href="https://fonts.googleapis.com/css2?family=Raleway:wght@400;600&display=swap" rel="stylesheet">
   <style>
     body {
@@ -39,35 +39,30 @@
 </div>
 
 <script>
-  const data20 = [];
-  const data30 = [];
-  const data40 = [];
-
-  const prezzoRilevato = document.getElementById("prezzoRilevato");
-  const rata = document.getElementById("rata");
-
-  function rilevaPrezzo() {
-    let el = document.querySelector('.current-price-display.price.current-price-discount');
-    if (el) {
-      let raw = parseFloat(el.textContent.replace(/[^\d,]/g, '').replace(',', '.'));
-      if (!isNaN(raw)) return Math.round(raw / 100) * 100;
-    }
-    return 2100; // fallback
+  function getParametroURL(nome) {
+    const urlParams = new URLSearchParams(window.location.search);
+    return urlParams.get(nome);
   }
 
   function calcolaRata(importo) {
     const durata = 40;
-    const interesseMensile = 0.006; // 0.6% mensile ipotetico
+    const interesseMensile = 0.006;
     const rataCalcolata = (importo * interesseMensile) / (1 - Math.pow(1 + interesseMensile, -durata));
     return rataCalcolata.toFixed(2);
   }
 
   window.addEventListener("DOMContentLoaded", function () {
-    setTimeout(function () {
-      const prezzo = rilevaPrezzo();
-      prezzoRilevato.textContent = prezzo + " €";
+    const prezzo = parseFloat(getParametroURL("prezzo"));
+    const prezzoRilevato = document.getElementById("prezzoRilevato");
+    const rata = document.getElementById("rata");
+
+    if (!isNaN(prezzo)) {
+      prezzoRilevato.textContent = prezzo.toFixed(2) + " €";
       rata.textContent = calcolaRata(prezzo) + " €";
-    }, 1000); // ritardo di 1 secondo per permettere il caricamento del DOM
+    } else {
+      prezzoRilevato.textContent = "Non disponibile";
+      rata.textContent = "-- €";
+    }
   });
 </script>
 
